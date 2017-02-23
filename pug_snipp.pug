@@ -1,0 +1,14 @@
+//- MAKE NAVIGATION
+mixin makeList(navItem)
+  ul#js-navbarList.navigation__list
+    - listItems = Array.prototype.slice.call(arguments);
+    for item in listItems
+      li.navigation__item
+        a.js-scroller.navigation__link(href=item.link)= item.name
+
+//- MAKE INPUT || TEXTAREA
+mixin input(type, name, placeholder)
+  if type == 'textarea'
+    textarea(name=name, placeholder=placeholder)
+  else
+    input(type=type, name=name, placeholder=placeholder)

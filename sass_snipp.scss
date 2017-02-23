@@ -1,0 +1,118 @@
+//- ### ### ### MEDIA QUERIES
+$maxW-1920: 'only screen and (max-width: 1920px)';
+$maxW-1200: 'only screen and (max-width: 1200px)';
+$maxW-1024: 'only screen and (max-width: 1024px)';
+$maxW-960: 'only screen and (max-width: 960px)';
+$maxW-750: 'only screen and (max-width: 750px)';
+$maxW-660: 'only screen and (max-width: 660px)';
+$maxW-460: 'only screen and (max-width: 460px)';
+$maxW-320: 'only screen and (max-width: 320px)';
+
+//- ### ### ### SIZE
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+//- ### ### ### MAX WIDTH / HEIGHT
+@mixin maxSize($width, $height) {
+  max-width: $width;
+  max-height: $height;
+}
+
+//- ### ### ### CLEARFIX
+@mixin clearfix {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+//- ### ### ### FLEXBOX
+@mixin flex($direction: row, $wrap: wrap, $justify: center) {
+  display: flex;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+  justify-content: $justify;
+}
+
+@mixin flexItem($basis: auto, $shrink: 1, $grow: 0) {
+  flex-basis: $basis;
+  flex-shrink: $shrink;
+  flex-grow: $grow;
+}
+
+//- ### ### ### COLUMNS
+@mixin columns($type) {
+  $columns: 12;
+  $column-width: 8.3333%;
+  @for $i from 1 through $columns {
+    .col#{$type}-#{$i} {
+      @if $i == $columns {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 100%;
+        width: 100%;
+        max-width: round($column-width * $i);
+      } @else {
+        flex-grow: 0;
+        flex-shrink: 1;
+        flex-basis: $column-width * $i;
+        max-width: $column-width * $i;
+      }
+    }
+  }
+}
+
+//- ### ### ### ROUND NUMBER
+@function pow($x, $n) {
+  $ret: 1;
+
+  @if $n >= 0 {
+    @for $i from 1 through $n {
+      $ret: $ret * $x;
+    }
+  } @else {
+    @for $i from $n to 0 {
+      $ret: $ret / $x;
+    }
+  }
+  @return $ret;
+}
+
+@function precision-round($float, $digits) {
+  $sass-precision: 5;
+
+  @if $digits > $sass-precision {
+    @warn "Sass sets default precision to #{$sass-precision} digits, and there is no way to change that for now."
+    + "The returned number will have #{$sass-precision} digits, even if you asked for `#{$digits}`."
+    + "See github.com/sass/sass/issues/1122 for further informations.";
+  }
+
+  $pow: pow(10, $digits);
+
+  @return round($float * $pow) / $pow;
+}
+// end round number
+
+//- ### ### ### CALC PX TO REM
+@function toRem($number) {
+  $converted: $number / $defaultFontSize;
+  $rounded: precision-round($converted, 3);
+  @return $rounded+rem;
+}
+
+//- ### ### ### BUTTON GENERATOR
+@mixin makeBtn($bg: $white, $hoverBg: $white, $inverted: false) {
+  background-color: $bg;
+  @if $inverted {
+    border: 1px solid $bg;
+  } @else {
+    border: 1px solid $bg;
+  }
+  color: $hoverBg;
+  transition: transform .1s linear, background-color .3s linear, border .3s linear;
+  &:hover {
+    background-color: $hoverBg;
+    color: $bg;
+  }
+}
