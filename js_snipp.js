@@ -253,7 +253,7 @@ win
     //navbar switcher
     navbarSwitch(offsets, documentHeight);
   });
-  
+
 function navbarSwitch(offsets, documentHeight) {
   var imgSource,
       windowOffset = this.pageYOffset,
@@ -295,9 +295,11 @@ function navbarSwitch(offsets, documentHeight) {
 }
 
 //- ### ### ### CREATE PSEUDO SELECT PAGINATION FOR SWIPER SLIDER
-function selectPagination(pagWrapper) {
+// pagWrapper is top element of pagination
+// desc = selector of element with text to be used as <option>
+function selectPagination(pagWrapper, desc) {
   if (win.innerWidth <= 960 && pagWrapper.classList.contains('active')) {
-    var bulletDesc =  pagWrapper.querySelector('.swiper-pagination-bullet-active .pagination__desc'),
+    var bulletDesc =  pagWrapper.querySelector(desc),
         descText =    bulletDesc.innerHTML,
         select =      document.createElement('div'),
         pagination =  pagWrapper.firstElementChild;
@@ -307,14 +309,11 @@ function selectPagination(pagWrapper) {
       .classList.add('pagination__select');
     // substring large text
     substringTxt(select, 30);
+    // keep select active after selecting another option
     if (pagWrapper.previousElementSibling) {
       select
         .classList.add('active');
     }
-    var resText = pagWrapper.previousElementSibling;
-    pagWrapper
-      .parentNode.removeChild(resText);
-
     pagWrapper
       .parentNode.insertBefore(select, pagWrapper);
     // find position of select element and align item list with it
